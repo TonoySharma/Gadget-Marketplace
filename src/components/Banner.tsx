@@ -8,8 +8,9 @@ import { FaArrowRight, FaPlay } from "react-icons/fa";
 
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
+import { Button } from "@heroui/react";
 
-// ছবিগুলোর হাই-রেজোলিউশন ইউআরএল অ্যারে
+
 const smartphoneImages: string[] = [
   "https://images.unsplash.com/photo-1695048133142-1a20484d2569?q=80&w=2560&auto=format&fit=crop",
   "https://images.unsplash.com/photo-1772986646005-94dea9855a5d?q=80&w=2560&auto=format&fit=crop",
@@ -18,20 +19,20 @@ const smartphoneImages: string[] = [
   "https://images.unsplash.com/photo-1516245556508-7d60d4ff0f39?q=80&w=2560&auto=format&fit=crop"
 ];
 
-// স্ট্যাটস ডেটার জন্য টাইপ ইন্টারফেস
+
 interface StatItem {
   number: string;
   label: string;
 }
 
 export default function Banner(): React.JSX.Element {
-  // Embla Carousel হুক উইথ অটোপ্লে টাইপ কনফিগারেশন
+
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true }, [
     Autoplay({ delay: 4000, stopOnInteraction: false }),
   ]);
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
-  // ক্যারাউজাল স্লাইড চেঞ্জ ট্র্যাক করার কলব্যাক ফাংশন
+
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
@@ -87,14 +88,14 @@ export default function Banner(): React.JSX.Element {
 
           <div className="mt-12 flex flex-wrap gap-5">
             <Link
-              href="/products"
+              href="/browse-products"
               className="group flex items-center gap-3 rounded-full bg-cyan-500 px-10 py-5 text-lg font-bold text-white transition-all duration-300 hover:scale-105 hover:bg-cyan-600 hover:shadow-lg hover:shadow-cyan-500/20"
             >
               Explore Now
               <FaArrowRight className="transition-transform group-hover:translate-x-1" />
             </Link>
 
-            <button className="flex items-center gap-3 rounded-full border-2 border-white/20 px-10 py-5 text-lg font-semibold text-white transition-all duration-300 hover:bg-white/10 hover:border-white/30">
+            <button className="flex items-center gap-3 rounded-full border-2 cursor-not-allowed border-white/20 px-10 py-5 text-lg font-semibold text-white transition-all duration-300 hover:bg-white/10 hover:border-white/30">
               <FaPlay className="text-sm" />
               Watch Official Demo
             </button>
@@ -141,7 +142,7 @@ export default function Banner(): React.JSX.Element {
           {/* Slider Dot Indicators */}
           <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex gap-3 z-20">
             {smartphoneImages.map((_, index) => (
-              <button
+              <Button
                 key={index}
                 onClick={() => emblaApi?.scrollTo(index)}
                 className={`h-3.5 rounded-full transition-all duration-300 ${

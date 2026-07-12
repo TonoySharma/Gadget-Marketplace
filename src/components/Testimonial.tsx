@@ -3,7 +3,10 @@
 import Image from "next/image";
 import { FaStar, FaQuoteLeft } from "react-icons/fa";
 import { motion } from "framer-motion";
-import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules";
+
+import "swiper/css";
 
 // প্রতিটি রিভিউর ডেটা স্ট্রাকচার টাইপসেফ করার জন্য ইন্টারফেস
 interface Review {
@@ -37,7 +40,17 @@ export default function Testimonials() {
       image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop",
       rating: 5,
       comment: "Finding a trusted source for genuine global edition smartphones is tough. This platform completely eliminated that worry. Highly recommended for any true tech lover!"
-    }
+    },
+    {
+  name: "Michael Carter",
+  role: "Software Engineer",
+  image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+  rating: 5,
+  comment:
+    "Outstanding shopping experience! My smartphone arrived earlier than expected and everything was perfectly sealed."
+},
+
+
   ];
 
   return (
@@ -61,7 +74,7 @@ export default function Testimonials() {
         </div>
 
         {/* Testimonials Grid Card Stack */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {reviews.map((review, idx) => (
             <motion.div
               key={idx}

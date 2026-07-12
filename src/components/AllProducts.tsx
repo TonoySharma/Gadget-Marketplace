@@ -82,11 +82,14 @@ const AllProducts = ({
                                     {product.priority}
                                 </span>
                             </div>
-
-                            <Button className="w-full mt-5 cursor-pointer
+                            <Link href={`/products/${product._id}`}>
+                                <Button className="w-full mt-5 cursor-pointer
                              bg-black hover:bg-gray-800 text-white py-2 rounded transition">
-                                View Details
-                            </Button>
+                                    View Details
+                                </Button>
+                            </Link>
+
+
                         </div>
                     </div>
                 ))}
