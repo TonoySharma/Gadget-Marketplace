@@ -1,6 +1,7 @@
 import Banner from "@/components/Banner";
 import FeatureGrid from "@/components/FeatureGrid";
 import Footer from "@/components/Footer";
+import LimitedProductHome from "@/components/LemetedProductHome";
 import Marquee from "@/components/Marquee";
 import TechFAQ from "@/components/TechFAQ";
 import TechShowcase from "@/components/TechShowcase";
@@ -12,6 +13,7 @@ export default function Home() {
     <div >
       <Banner />
       <Marquee />
+      <LimitedProductHome />
       <Testimonials />
       <FeatureGrid />
       <TechFAQ />
