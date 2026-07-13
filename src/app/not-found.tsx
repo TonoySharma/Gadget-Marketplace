@@ -29,7 +29,7 @@ export default function NotFound() {
        
           <button
             onClick={() => window.history.back()}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-800/5 transition-all duration-200"
+            className="w-full sm:w-auto flex items-center cursor-pointer justify-center gap-2 px-5 py-2.5 text-sm font-medium text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm hover:bg-zinc-50 dark:hover:bg-zinc-800/5 transition-all duration-200"
           >
             <FiArrowLeft className="w-4 h-4" />
             Go Back
@@ -38,7 +38,7 @@ export default function NotFound() {
       
           <Link
             href="/"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-500/10 dark:shadow-none transition-all duration-200"
+            className="w-full sm:w-auto cursor-pointer flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-500/10 dark:shadow-none transition-all duration-200"
           >
             <FiHome className="w-4 h-4" />
             Back to Home
