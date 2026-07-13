@@ -105,12 +105,21 @@ const NavBar = () => {
                   </li>
                   <li>
                     <NavLink
+                      href="/product-manage"
+                      className="block rounded-full px-4 py-2 text-sm text-gray-600 transition-all hover:bg-white hover:text-indigo-600 hover:shadow-sm no-underline"
+                    >
+                      Manage Products
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
                       href="/profile"
                       className="block rounded-full px-4 py-2 text-sm text-gray-600 transition-all hover:bg-white hover:text-indigo-600 hover:shadow-sm no-underline"
                     >
                       Profile
                     </NavLink>
                   </li>
+
                 </>
               )}
             </ul>
@@ -253,11 +262,31 @@ const NavBar = () => {
 
               {session && user && (
                 <>
-                  <NavLink href="/add-product" onClick={() => setIsMenuOpen(false)} className="no-underline">
-                    <Button className="w-full cursor-pointer rounded-xl bg-transparent px-4 py-3 text-left justify-start text-sm font-medium text-gray-600 transition-all hover:bg-indigo-50 hover:text-indigo-600">
+                  <li>
+                    <NavLink
+                      href="/add-product"
+                      className="block rounded-full px-4 py-2 text-sm text-gray-600 transition-all hover:bg-white hover:text-indigo-600 hover:shadow-sm no-underline"
+                    >
                       Add Product
-                    </Button>
-                  </NavLink>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      href="/product-manage"
+                      className="block rounded-full px-4 py-2 text-sm text-gray-600 transition-all hover:bg-white hover:text-indigo-600 hover:shadow-sm no-underline"
+                    >
+                      Manage Products
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      href="/profile"
+                      className="block rounded-full px-4 py-2 text-sm text-gray-600 transition-all hover:bg-white hover:text-indigo-600 hover:shadow-sm no-underline"
+                    >
+                      Profile
+                    </NavLink>
+                  </li>
+
                 </>
               )}
             </div>
