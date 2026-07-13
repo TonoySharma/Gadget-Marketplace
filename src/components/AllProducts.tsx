@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@heroui/react";
 import FadeUp from "./FadeUp";
+import ProductFilter from "./ProductFilter";
 
 interface Product {
     _id: string;
@@ -32,7 +33,11 @@ const AllProducts = ({
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     return (
-        <>
+        <div>
+            {/* Search Product Filter */}
+            <ProductFilter></ProductFilter>
+
+
             <FadeUp className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 {products.map((product) => (
                     <div
@@ -128,7 +133,7 @@ const AllProducts = ({
                     Next
                 </Link>
             </div>
-        </>
+        </div>
     );
 };
 
