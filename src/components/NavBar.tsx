@@ -4,13 +4,17 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@heroui/react";
 import Image from "next/image";
-import { signOut, useSession } from "next-auth/react"; 
+
 import NavLink from "./NavLink";
+
+import { authClient } from "@/lib/auth-client";
+import toast from "react-hot-toast";
+
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  
-  
+
+
   // const { data: session } = useSession();
   // const user = session?.user as {
   //   name?: string | null;
@@ -19,12 +23,21 @@ const NavBar = () => {
   //   role?: string; 
   // } | undefined;
 
-  const session = { user: { name: "John Doe", email: "john@example.com", image: null, role: "buyer" } };
+  const { data: session } = authClient.useSession();
+
   const user = session?.user;
 
-  const handleLogout = async (): Promise<void> => {
-    await signOut();
+  const handleLogout = async () => {
+    const { error } = await authClient.signOut();
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+
+     toast.success("Logged out successfully!");
   };
+  
 
   return (
     <>
@@ -36,7 +49,7 @@ const NavBar = () => {
           <Link
             href="/">
             <div>
-   
+
               <Image
                 src="/icon.png"
                 alt="Gadget Mart Logo"
@@ -51,7 +64,7 @@ const NavBar = () => {
           <div className="flex items-center gap-5">
             {/* Desktop Nav Links (Fully Responsive - hidden on mobile) */}
             <ul className="hidden border border-gray-200 px-6 py-2 rounded-full items-center gap-6 font-medium bg-gray-50/50 md:flex list-none m-0">
-          
+
               <li>
                 <NavLink
                   href="/"
@@ -69,7 +82,7 @@ const NavBar = () => {
                   Browse Products
                 </NavLink>
               </li>
-  
+
               <li>
                 <NavLink
                   href="/about-us"
@@ -82,16 +95,6 @@ const NavBar = () => {
 
               {session && user && (
                 <>
-     
-                  <li>
-                    <NavLink
-                      href="/my-cart"
-                      className="block rounded-full px-4 py-2 text-sm text-gray-600 transition-all hover:bg-white hover:text-indigo-600 hover:shadow-sm no-underline"
-                    >
-                      My Cart
-                    </NavLink>
-                  </li>
-            
                   <li>
                     <NavLink
                       href="/dashboard"
@@ -156,7 +159,7 @@ const NavBar = () => {
                 </div>
               ) : (
                 <>
-                  <Link href="/logIn" className="no-underline">
+                  <Link href="/login" className="no-underline">
                     <Button className="cursor-pointer rounded border bg-transparent px-4 py-2 text-sm font-medium text-gray-600 transition-all hover:bg-indigo-50">
                       Log In
                     </Button>
@@ -187,7 +190,7 @@ const NavBar = () => {
 
       {/* --- Premium Mobile Slider / Sidebar (Fully Responsive) --- */}
       <div className={`fixed inset-0 z-50 md:hidden transition-opacity duration-300 ${isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
-        
+
         {/* Backdrop Overlay */}
         <div
           className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
@@ -196,7 +199,7 @@ const NavBar = () => {
 
         {/* Sidebar Panel */}
         <div className={`absolute inset-y-0 left-0 w-4/5 max-w-sm bg-white p-6 shadow-2xl transition-transform duration-300 ease-out flex flex-col justify-between ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
-          
+
           <div>
             {/* Sidebar Header */}
             <div className="flex items-center justify-between pb-6 border-b border-gray-100">
@@ -220,7 +223,7 @@ const NavBar = () => {
               </button>
             </div>
 
-      
+
             <div className="flex flex-col gap-1.5 pt-6">
               <NavLink href="/" onClick={() => setIsMenuOpen(false)} className="no-underline">
                 <Button className="w-full cursor-pointer rounded-xl bg-transparent px-4 py-3 text-left justify-start text-sm font-medium text-gray-600 transition-all hover:bg-indigo-50 hover:text-indigo-600">
@@ -228,13 +231,13 @@ const NavBar = () => {
                 </Button>
               </NavLink>
 
-              <NavLink href="/browse-gadgets" onClick={() => setIsMenuOpen(false)} className="no-underline">
+              <NavLink href="/browse-products" onClick={() => setIsMenuOpen(false)} className="no-underline">
                 <Button className="w-full cursor-pointer rounded-xl bg-transparent px-4 py-3 text-left justify-start text-sm font-medium text-gray-600 transition-all hover:bg-indigo-50 hover:text-indigo-600">
-                  Browse Gadgets
+                  Browse Products
                 </Button>
               </NavLink>
 
-              <NavLink href="/about" onClick={() => setIsMenuOpen(false)} className="no-underline">
+              <NavLink href="/about-us" onClick={() => setIsMenuOpen(false)} className="no-underline">
                 <Button className="w-full cursor-pointer rounded-xl bg-transparent px-4 py-3 text-left justify-start text-sm font-medium text-gray-600 transition-all hover:bg-indigo-50 hover:text-indigo-600">
                   About Us
                 </Button>
@@ -242,12 +245,6 @@ const NavBar = () => {
 
               {session && user && (
                 <>
-                  <NavLink href="/cart" onClick={() => setIsMenuOpen(false)} className="no-underline">
-                    <Button className="w-full cursor-pointer rounded-xl bg-transparent px-4 py-3 text-left justify-start text-sm font-medium text-gray-600 transition-all hover:bg-indigo-50 hover:text-indigo-600">
-                      My Cart
-                    </Button>
-                  </NavLink>
-
                   <NavLink href="/dashboard" onClick={() => setIsMenuOpen(false)} className="no-underline">
                     <Button className="w-full cursor-pointer rounded-xl bg-transparent px-4 py-3 text-left justify-start text-sm font-medium text-gray-600 transition-all hover:bg-indigo-50 hover:text-indigo-600">
                       DashBoard
@@ -259,7 +256,7 @@ const NavBar = () => {
           </div>
 
           {/* Sidebar Footer & Auth Actions (কমেন্টে রাখা হলো যেমনটা চেয়েছিলেন) */}
-          {/* <div className="border-t border-gray-100 pt-4 flex flex-col gap-3">
+          <div className="border-t border-gray-100 pt-4 flex flex-col gap-3">
             {user ? (
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-3 px-2">
@@ -269,7 +266,7 @@ const NavBar = () => {
                       height={40}
                       src={user.image}
                       alt={user.name || "User profile"}
-                      className="h-10 w-10 rounded-full object-cover" 
+                      className="h-10 w-10 rounded-full object-cover"
                     />
                   ) : (
                     <div className="flex h-10 w-10 items-center justify-center rounded-full bg-sky-500 font-semibold text-white">
@@ -290,7 +287,7 @@ const NavBar = () => {
               </div>
             ) : (
               <>
-                <Link href="/logIn" className="no-underline">
+                <Link href="/login" className="no-underline">
                   <Button className="w-full cursor-pointer rounded border bg-transparent px-4 py-2 text-sm font-medium text-gray-600 transition-all hover:bg-sky-200">
                     Log In
                   </Button>
@@ -303,7 +300,7 @@ const NavBar = () => {
                 </Link>
               </>
             )}
-          </div> */}
+          </div>
 
         </div>
       </div>

@@ -3,12 +3,8 @@
 import Image from "next/image";
 import { FaStar, FaQuoteLeft } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
 
-import "swiper/css";
 
-// প্রতিটি রিভিউর ডেটা স্ট্রাকচার টাইপসেফ করার জন্য ইন্টারফেস
 interface Review {
   name: string;
   role: string;
@@ -42,13 +38,13 @@ export default function Testimonials() {
       comment: "Finding a trusted source for genuine global edition smartphones is tough. This platform completely eliminated that worry. Highly recommended for any true tech lover!"
     },
     {
-  name: "Michael Carter",
-  role: "Software Engineer",
-  image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
-  rating: 5,
-  comment:
-    "Outstanding shopping experience! My smartphone arrived earlier than expected and everything was perfectly sealed."
-},
+      name: "Michael Carter",
+      role: "Software Engineer",
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop",
+      rating: 5,
+      comment:
+        "Outstanding shopping experience! My smartphone arrived earlier than expected and everything was perfectly sealed."
+    },
 
 
   ];
@@ -59,7 +55,7 @@ export default function Testimonials() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-purple-500/10 blur-[150px] pointer-events-none" />
 
       <div className="container mx-auto relative z-10">
-        
+
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
           <span className="text-xs font-bold tracking-[0.25em] text-cyan-400 uppercase bg-cyan-400/10 px-4 py-1.5 rounded-full border border-cyan-400/20">

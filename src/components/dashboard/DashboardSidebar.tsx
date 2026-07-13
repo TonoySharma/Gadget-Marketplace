@@ -17,9 +17,9 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-    { icon: House, href: "/dashboard/reader", label: "Dashboard" },
-    { icon: LuHistory, href: "/dashboard/purchase", label: "Purchase History" },
-    { icon: LuNotebookPen, href: "/dashboard/purchaseEbook", label: "Purchased Ebooks" },
+    { icon: House, href: "/dashboard", label: "Dashboard" },
+    { icon: LuHistory, href: "/dashboard/my-cart", label: "My Cart" },
+    { icon: LuNotebookPen, href: "/dashboard/purchaseEbook", label: "Purchased Products" },
     { icon: CgProfile, href: "/dashboard/profile", label: "Profile" },
     { icon: BsBookmarkStarFill, href: "/dashboard/bookmark", label: "Bookmark" },
 ];

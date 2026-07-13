@@ -1,6 +1,6 @@
 export async function getProductById(id: string) {
   const res = await fetch(
-    `http://localhost:5000/api/products/${id}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/api/products/${id}`,
     {
       cache: "no-store",
     }

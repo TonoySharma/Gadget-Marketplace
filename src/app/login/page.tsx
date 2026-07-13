@@ -3,10 +3,9 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Form, Input, Button } from "@heroui/react";
+import { Form, Input, Button, TextField, Label, InputGroup, FieldError } from "@heroui/react";
 import { Eye, EyeSlash } from "@gravity-ui/icons";
 import { FcGoogle } from "react-icons/fc";
-import { CiLogin } from "react-icons/ci";
 import toast from "react-hot-toast";
 
 // App configurations or dynamic integrations
@@ -31,14 +30,14 @@ export default function LoginPage() {
       const { data, error } = await authClient.signIn.email({
         email: userData.email as string,
         password: userData.password as string,
-        remember: true,
+        rememberMe: true,
         callbackURL: "/",
       });
 
       if (error) {
         toast.error(error.message || "An error occurred during login.");
       } else if (data) {
-        toast.success("Welcome back to GadgetHub!");
+        toast.success("login successful!");
         router.push("/");
       }
     } catch (err) {
@@ -61,13 +60,13 @@ export default function LoginPage() {
   return (
     <FadeUp>
       <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-        
+
         {/* MAIN STRUCTURAL CARD */}
-        <div className="w-full max-w-6xl bg-white shadow-2xl rounded-3xl overflow-hidden grid lg:grid-cols-2">
-          
+        <div className="w-full max-w-6xl bg-white shadow rounded-xl overflow-hidden grid lg:grid-cols-2">
+
           {/* LEFT PANEL - MOBILE & GADGET STORE BRANDING */}
           <div className="hidden lg:flex flex-col justify-center items-center bg-gradient-to-br from-blue-600 to-indigo-800 text-white p-12">
-            
+
             <img
               src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1200&q=80"
               alt="Latest Smartphones and Gadgets"
@@ -84,15 +83,15 @@ export default function LoginPage() {
 
             <div className="mt-8 space-y-3.5 text-sm text-blue-50/90 self-start xl:ml-12">
               <div className="flex items-center gap-2">
-                <span className="text-emerald-400 font-bold">✔</span> 
+                <span className="text-emerald-400 font-bold">✔</span>
                 <span>Exclusive pre-order access to flagship devices</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-emerald-400 font-bold">✔</span> 
+                <span className="text-emerald-400 font-bold">✔</span>
                 <span>Track 100% genuine warranty & super-fast delivery</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-emerald-400 font-bold">✔</span> 
+                <span className="text-emerald-400 font-bold">✔</span>
                 <span>Instant trade-in calculations for your old phone</span>
               </div>
             </div>
@@ -101,7 +100,7 @@ export default function LoginPage() {
           {/* RIGHT PANEL - SECURE CREDENTIALS INTERACTION */}
           <div className="flex items-center justify-center p-8 sm:p-12">
             <div className="w-full max-w-md">
-              
+
               {/* BRAND HEADER */}
               <div className="mb-8 text-center lg:text-left">
                 <h1 className="text-3xl font-bold tracking-tight text-foreground">
@@ -114,62 +113,71 @@ export default function LoginPage() {
 
               {/* DYNAMIC FORM */}
               <Form className="flex flex-col gap-4" onSubmit={onSubmit}>
-                
+
                 {/* EMAIL ATTRIBUTE */}
-                <Input
+                <TextField
                   isRequired
-                  label="Email Address"
-                  labelPlacement="outside"
                   name="email"
                   type="email"
-                  placeholder="name@example.com"
-                  variant="bordered"
-                  radius="lg"
-                  size="lg"
-                  validate={(value: string) => {
+                  validate={(value) => {
                     if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
-                      return "Please enter a valid email address";
+                      return "Please enter a valid email";
                     }
-                    return true;
-                  }}
-                />
+                    return null;
+                  }}>
+                  <Label>Email</Label>
+                  <Input placeholder="Enter your email" />
+                  <FieldError />
+                </TextField>
 
                 {/* PASSWORD ATTRIBUTE WITH EMBEDDED TOGGLE SUFFIX */}
-                <Input
-                  isRequired
-                  label="Password"
-                  labelPlacement="outside"
+                <TextField
+                  className="w-full"
                   name="password"
-                  placeholder="••••••••"
-                  variant="bordered"
-                  radius="lg"
-                  size="lg"
-                  type={isVisible ? "text" : "password"}
-                  endContent={
-                    <button 
-                      className="focus:outline-none text-default-400 hover:text-default-600 transition-colors" 
-                      type="button" 
-                      onClick={toggleVisibility}
-                      aria-label="toggle password visibility"
-                    >
-                      {isVisible ? (
-                        <Eye className="text-xl" />
-                      ) : (
-                        <EyeSlash className="text-xl" />
-                      )}
-                    </button>
-                  }
-                  validate={(value: string) => {
-                    if (value.length < 8) return "Minimum 8 characters required";
-                    if (!/[A-Z]/.test(value)) return "Must include an uppercase letter";
-                    if (!/[0-9]/.test(value)) return "Must include at least one number";
-                    return true;
+                  isRequired
+                  validate={(value) => {
+                    if (value.length < 8) {
+                      return "Password must be at least 8 characters";
+                    }
+                    if (!/[A-Z]/.test(value)) {
+                      return "Password must contain uppercase letter";
+                    }
+                    if (!/[0-9]/.test(value)) {
+                      return "Password must contain number";
+                    }
+                    return null;
                   }}
-                />
+                >
+                  <Label>Password</Label>
+
+                  <InputGroup className="border rounded-lg overflow-hidden">
+                    <InputGroup.Input
+                      name="password" // <--- Ekhane name attribute jog kora hoyeche
+                      type={isVisible ? "text" : "password"}
+                      placeholder="Your Password"
+                    />
+
+                    <InputGroup.Suffix>
+                      <Button
+                        isIconOnly
+                        variant="ghost"
+                        onPress={() => setIsVisible(!isVisible)}
+                      >
+                        {isVisible ? (
+                          <Eye className="size-4" />
+                        ) : (
+                          <EyeSlash className="size-4" />
+                        )}
+                      </Button>
+                    </InputGroup.Suffix>
+                  </InputGroup>
+
+                  <FieldError />
+                </TextField>
 
                 <div className="flex justify-end pt-1">
-                  <Link 
-                    href="/forgot-password" 
+                  <Link
+                    href="/forgot-password"
                     className="text-sm text-blue-600 hover:underline font-medium"
                   >
                     Forgot password?
@@ -179,14 +187,9 @@ export default function LoginPage() {
                 {/* SECURE SUBMISSION BUTTON */}
                 <Button
                   type="submit"
-                  color="primary"
-                  size="lg"
-                  radius="lg"
-                  isLoading={isLoading}
-                  className="w-full font-medium mt-2 shadow-md shadow-blue-200"
-                  startContent={!isLoading && <CiLogin className="text-xl stroke-[1]" />}
+                  className="w-full bg-indigo-500 rounded hover:bg-indigo-700 text-white py-6"
                 >
-                  Sign In
+                  Log In
                 </Button>
 
                 {/* ARCHITECTURAL SEPARATOR */}
@@ -198,13 +201,11 @@ export default function LoginPage() {
 
                 {/* IDENTITY PROVIDER SYSTEM */}
                 <Button
-                  variant="bordered"
-                  size="lg"
-                  radius="lg"
+                  type="button" // form submithandler block korar jonno type="button" kora bhalo
                   onClick={handleGoogleLogin}
-                  className="w-full border-default-200 text-default-700 hover:bg-default-50 font-medium"
-                  startContent={<FcGoogle className="text-xl" />}
+                  className="w-full border p-6 rounded"
                 >
+                  <FcGoogle size={30} />
                   Continue with Google
                 </Button>
               </Form>
@@ -212,8 +213,8 @@ export default function LoginPage() {
               {/* PERSISTENT FOOTER FOR COMPLEMENTARY ACTION */}
               <p className="text-center text-sm text-default-500 mt-8">
                 New to GadgetHub?{" "}
-                <Link 
-                  href="/signUp" 
+                <Link
+                  href="/signUp"
                   className="text-blue-600 hover:underline font-semibold transition-colors"
                 >
                   Create an account

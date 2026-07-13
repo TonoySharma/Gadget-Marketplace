@@ -5,7 +5,6 @@ import {
     FaArrowLeft,
     FaMapMarkerAlt,
     FaCalendarAlt,
-    FaShoppingCart,
 } from "react-icons/fa";
 
 import FadeUp from "@/components/FadeUp";
