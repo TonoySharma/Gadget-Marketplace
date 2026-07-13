@@ -1,15 +1,20 @@
 "use client";
 
+import { Button } from "@heroui/react";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { FiBookOpen, FiDollarSign, FiFileText, FiImage, FiAlertCircle } from "react-icons/fi";
+import { FiBookOpen, FiDollarSign, FiFileText, FiImage, FiAlertCircle, FiTag, FiMapPin, FiGrid } from "react-icons/fi";
 
+// JSON ডেটার সাথে সামঞ্জস্য রেখে ইন্টারফেস আপডেট করা হয়েছে
 interface FormData {
   title: string;
   shortDescription: string;
   fullDescription: string;
+  category: string;
+  brand: string;
   price: number;
-  priority: "low" | "medium" | "high";
+  priority: "Low" | "Medium" | "High"; // JSON-এ PascalCase ("Medium") ছিল, তাই টাইপ পরিবর্তন করা হয়েছে
+  location: string;
   imageUrl?: string;
 }
 
@@ -18,16 +23,18 @@ export default function ProductForm() {
     title: "",
     shortDescription: "",
     fullDescription: "",
+    category: "",
+    brand: "",
     price: 0,
-    priority: "medium",
+    priority: "Medium",
+    location: "",
     imageUrl: "",
   });
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
-
-  const IMGBB_API_KEY = "YOUR_IMGBB_API_KEY_HERE"; 
+  const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -39,7 +46,6 @@ export default function ProductForm() {
     }));
   };
 
- 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setImageFile(e.target.files[0]);
@@ -53,7 +59,6 @@ export default function ProductForm() {
     try {
       let finalImageUrl = "";
 
-  
       if (imageFile) {
         const imgFormData = new FormData();
         imgFormData.append("image", imageFile);
@@ -66,7 +71,7 @@ export default function ProductForm() {
         const imgbbData = await imgbbResponse.json();
 
         if (imgbbData.success) {
-          finalImageUrl = imgbbData.data.url; 
+          finalImageUrl = imgbbData.data.url;
         } else {
           toast.error("Failed to upload image to ImgBB");
           setLoading(false);
@@ -74,14 +79,15 @@ export default function ProductForm() {
         }
       }
 
-   
+      // নতুন ফিল্ডসহ ফুল অবজেক্ট তৈরি
       const productData = {
         ...formData,
         imageUrl: finalImageUrl || formData.imageUrl,
+        createdAt: new Date().toISOString(), // ডাটাবেজের জন্য অটো জেনারেটেড টাইমস্ট্যাম্প
+        rating: 0, // ইনিশিয়াল বা ডিফল্ট রেটিং সেট করে দেওয়া
       };
 
-
-      const response = await fetch("http://localhost:5000/api/add-products", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/add-products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,18 +97,20 @@ export default function ProductForm() {
 
       if (response.ok) {
         toast.success("Product added successfully!");
-   
+
         setFormData({
           title: "",
           shortDescription: "",
           fullDescription: "",
+          category: "",
+          brand: "",
           price: 0,
-          priority: "medium",
+          priority: "Medium",
+          location: "",
           imageUrl: "",
         });
-        setImageFile(null); 
-        
-    
+        setImageFile(null);
+
         const fileInput = document.getElementById('image-input') as HTMLInputElement;
         if (fileInput) fileInput.value = '';
 
@@ -127,16 +135,55 @@ export default function ProductForm() {
         {/* Title */}
         <div>
           <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Title</label>
-          <div className="relative">
-            <input
-              type="text"
-              name="title"
-              required
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="Enter product title"
-              className="w-full pl-3 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent dark:border-zinc-700"
-            />
+          <input
+            type="text"
+            name="title"
+            required
+            value={formData.title}
+            onChange={handleChange}
+            placeholder="phone title"
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent dark:border-zinc-700"
+          />
+        </div>
+
+        {/* Category & Brand (Grid Layout) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Category */}
+          <div>
+            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Category</label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
+                <FiGrid />
+              </span>
+              <input
+                type="text"
+                name="category"
+                required
+                value={formData.category}
+                onChange={handleChange}
+                placeholder="e.g., Smartphones"
+                className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent dark:border-zinc-700"
+              />
+            </div>
+          </div>
+
+          {/* Brand */}
+          <div>
+            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Brand</label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
+                <FiTag />
+              </span>
+              <input
+                type="text"
+                name="brand"
+                required
+                value={formData.brand}
+                onChange={handleChange}
+                placeholder="e.g., Nothing"
+                className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent dark:border-zinc-700"
+              />
+            </div>
           </div>
         </div>
 
@@ -153,7 +200,7 @@ export default function ProductForm() {
               required
               value={formData.shortDescription}
               onChange={handleChange}
-              placeholder="Brief summary of the book"
+              placeholder="Sleek monochromatic glyph lighting design..."
               className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent dark:border-zinc-700"
             />
           </div>
@@ -168,13 +215,13 @@ export default function ProductForm() {
             rows={4}
             value={formData.fullDescription}
             onChange={handleChange}
-            placeholder="Detailed description of the ebook..."
+            placeholder="Featuring a unique symmetrical transparent aesthetic..."
             className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent dark:border-zinc-700"
           />
         </div>
 
-        {/* Price & Priority (Grid Layout) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Price, Priority & Location (Grid Layout) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {/* Price */}
           <div>
             <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Price ($)</label>
@@ -185,10 +232,11 @@ export default function ProductForm() {
               <input
                 type="number"
                 name="price"
-                min="0"
                 required
-                value={formData.price}
+          
+                value={formData.price === 0 ? "" : formData.price}
                 onChange={handleChange}
+                placeholder="0" 
                 className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent dark:border-zinc-700"
               />
             </div>
@@ -207,18 +255,37 @@ export default function ProductForm() {
                 onChange={handleChange}
                 className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-zinc-900 dark:border-zinc-700"
               >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
               </select>
+            </div>
+          </div>
+
+          {/* Location */}
+          <div>
+            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Location</label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
+                <FiMapPin />
+              </span>
+              <input
+                type="text"
+                name="location"
+                required
+                value={formData.location}
+                onChange={handleChange}
+                placeholder="e.g., Location"
+                className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-transparent dark:border-zinc-700"
+              />
             </div>
           </div>
         </div>
 
-        {/* Updated Image Input (File Upload instead of URL input) */}
+        {/* Image File Input */}
         <div>
           <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-            Product Image <span className="text-zinc-400 font-normal">(Optional)</span>
+            Product Image
           </label>
           <div className="relative">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
@@ -235,13 +302,13 @@ export default function ProductForm() {
         </div>
 
         {/* Submit Button */}
-        <button
+        <Button
           type="submit"
           disabled={loading}
-          className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full mt-2 bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? "Uploading & Adding..." : "Submit product"}
-        </button>
+        </Button>
       </form>
     </div>
   );
