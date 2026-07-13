@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import { FiEye, FiTrash2, FiSearch, FiPackage, FiSliders, FiAlertCircle } from "react-icons/fi";
-
+import { FiEye, FiTrash2, FiPackage, FiAlertCircle } from "react-icons/fi";
 
 interface Product {
   _id: string;
@@ -19,8 +18,6 @@ interface Product {
 
 export default function ManageItemsPage() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
   const [loading, setLoading] = useState(true);
 
 
@@ -44,6 +41,7 @@ export default function ManageItemsPage() {
     fetchProducts();
   }, []);
 
+
   const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this item?")) return;
 
@@ -65,21 +63,6 @@ export default function ManageItemsPage() {
   };
 
 
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch =
-      product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.brand.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      product.category.toLowerCase().includes(searchQuery.toLowerCase());
-
-    const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
-
-    return matchesSearch && matchesCategory;
-  });
-
-
-  const categories = ["All", ...Array.from(new Set(products.map((p) => p.category)))];
-
-
   const getPriorityStyle = (priority: string) => {
     switch (priority) {
       case "High": return "bg-rose-50 text-rose-700 dark:bg-rose-950/30 dark:text-rose-400 border-rose-200";
@@ -92,7 +75,7 @@ export default function ManageItemsPage() {
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-4 md:p-8 transition-colors duration-200">
       <div className="max-w-6xl mx-auto space-y-6">
         
-   
+  
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800">
           <div className="space-y-1">
             <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 flex items-center gap-2">
@@ -104,53 +87,21 @@ export default function ManageItemsPage() {
           </div>
           <div className="bg-zinc-100 dark:bg-zinc-800 px-4 py-2 rounded-xl text-center sm:text-right">
             <span className="text-xs text-zinc-500 dark:text-zinc-400 block">Total Live Items</span>
-            <span className="text-xl font-bold text-zinc-800 dark:text-zinc-100">{filteredProducts.length}</span>
-          </div>
-        </div>
-
-      
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400">
-              <FiSearch />
-            </span>
-            <input
-              type="text"
-              placeholder="Search by title, brand, or category..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-zinc-900 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm dark:border-zinc-800"
-            />
-          </div>
-          
-          <div className="relative min-w-[160px]">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-400 pointer-events-none">
-              <FiSliders />
-            </span>
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-zinc-900 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm dark:border-zinc-800 cursor-pointer appearance-none"
-            >
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
+            <span className="text-xl font-bold text-zinc-800 dark:text-zinc-100">{products.length}</span>
           </div>
         </div>
 
   
         {loading ? (
           <div className="text-center py-20 text-zinc-500">Loading your stock...</div>
-        ) : filteredProducts.length === 0 ? (
+        ) : products.length === 0 ? (
           <div className="bg-white dark:bg-zinc-900 border rounded-2xl p-12 text-center space-y-3 dark:border-zinc-800">
             <FiAlertCircle className="w-12 h-12 text-zinc-300 mx-auto" />
             <h3 className="text-lg font-medium text-zinc-700 dark:text-zinc-300">No items found</h3>
-            <p className="text-sm text-zinc-400">Try adjusting your search keywords or active filters.</p>
+            <p className="text-sm text-zinc-400">Your inventory is currently empty.</p>
           </div>
         ) : (
           <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-800 overflow-hidden">
-     
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
@@ -164,12 +115,12 @@ export default function ManageItemsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800 text-sm">
-                  {filteredProducts.map((product) => (
+                  {products.map((product) => (
                     <tr 
                       key={product._id} 
                       className="hover:bg-zinc-50/80 dark:hover:bg-zinc-800/30 transition duration-150 group"
                     >
-           
+               
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <img
@@ -186,14 +137,14 @@ export default function ManageItemsPage() {
                         </div>
                       </td>
 
-                
+              
                       <td className="px-6 py-4">
                         <span className="px-2.5 py-1 text-xs font-medium rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300">
                           {product.category}
                         </span>
                       </td>
 
-            
+             
                       <td className="px-6 py-4 font-mono font-bold text-zinc-700 dark:text-zinc-300">
                         ${product.price.toLocaleString()}
                       </td>
@@ -205,12 +156,11 @@ export default function ManageItemsPage() {
                         </span>
                       </td>
 
-             
+                 
                       <td className="px-6 py-4 text-zinc-500 dark:text-zinc-400">
                         {product.location}
                       </td>
 
-                  
                       <td className="px-6 py-4 text-right">
                         <div className="flex items-center justify-end gap-2">
                           {/* View Button */}
