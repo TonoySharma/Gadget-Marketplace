@@ -28,9 +28,7 @@ export default function ManageItemsPage() {
         if (response.ok) {
           const data = await response.json();
           setProducts(data);
-        } else {
-          toast.error("Failed to load products");
-        }
+        } 
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {

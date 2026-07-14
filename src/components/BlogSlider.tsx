@@ -1,10 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
-
 
 const blogData = [
   {
@@ -15,7 +14,7 @@ const blogData = [
   },
   {
     id: 2,
-    image: "https://images.unsplash.com/photo-1588444837495-c6cfeb53f32d?q=80&w=2000", 
+    image: "https://images.unsplash.com/photo-1624258919367-5dc28f5dc293?w=500&auto=format&fit=crop&q=60", 
     date: "Aug 22, 2025",
     title: "AirBuds Deliver Comfort, Style, and Premium Sound",
   },
@@ -71,12 +70,27 @@ const blogData = [
 
 export default function BlogSlider() {
   const [startIndex, setStartIndex] = useState(0);
-  const visibleCards = 4;
+  const [visibleCards, setVisibleCards] = useState(4);
   const totalItems = blogData.length;
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setVisibleCards(1); 
+      } else {
+        setVisibleCards(4);
+      }
+    };
+
+    handleResize(); 
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const nextSlide = () => {
     setStartIndex((prevIndex) => 
-      prevIndex + visibleCards >= totalItems ? 0 : prevIndex + 1
+      prevIndex + 1 >= totalItems - visibleCards + 1 ? 0 : prevIndex + 1
     );
   };
 
@@ -89,75 +103,69 @@ export default function BlogSlider() {
   const visibleData = blogData.slice(startIndex, startIndex + visibleCards);
 
   return (
-   
-    <section className="w-full bg-slate-950 py-16 px-4 md:px-8 overflow-hidden select-none min-h-[500px] flex flex-col justify-center">
+    <section className="w-full bg-slate-950 py-12 md:py-16 px-4 md:px-8 overflow-hidden select-none min-h-[500px] flex flex-col justify-center">
       
-     
-      <div className="max-w-7xl mx-auto text-center mb-12">
-        <h2 className="text-3xl font-bold text-gray-100 mb-2 tracking-tight">
+
+      <div className="max-w-7xl mx-auto text-center mb-8 md:mb-12">
+        <h2 className="text-2xl md:text-3xl font-bold text-gray-100 mb-2 tracking-tight">
           Blogging Refers To Managing Blog
         </h2>
-        <p className="text-sm text-gray-200 max-w-xl mx-auto font-light">
+        <p className="text-xs md:text-sm text-gray-300 max-w-xl mx-auto font-light px-4">
           Ellentesque et justo tempus fermentum sem viverra ultrices
         </p>
       </div>
 
 
-      <div className="relative max-w-7xl mx-auto w-full px-4 md:px-10">
+      <div className="relative max-w-7xl mx-auto w-full px-4 sm:px-6 md:px-10">
         
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full">
-          <AnimatePresence mode="popLayout">
-            {visibleData.map((item, index) => (
+        <button
+          onClick={prevSlide}
+          className="absolute -left-1 md:-left-4 top-[35%] sm:top-[38%] -translate-y-1/2 z-30 p-2.5 md:p-3 bg-white hover:bg-gray-50 text-gray-800 rounded-full shadow-lg border border-gray-100 transition-all active:scale-90 cursor-pointer"
+          aria-label="Previous Slide"
+        >
+          <FiArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
+        </button>
+
+
+        <button
+          onClick={nextSlide}
+          className="absolute -right-1 md:-right-4 top-[35%] sm:top-[38%] -translate-y-1/2 z-30 p-2.5 md:p-3 bg-white hover:bg-gray-50 text-gray-800 rounded-full shadow-lg border border-gray-100 transition-all active:scale-90 cursor-pointer"
+          aria-label="Next Slide"
+        >
+          <FiArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+        </button>
+
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 w-full px-6 sm:px-2">
+          <AnimatePresence mode="popLayout" initial={false}>
+            {visibleData.map((item) => (
               <motion.div
                 key={item.id}
                 layout
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -30 }}
-                transition={{ duration: 0.4, ease: "easeInOut" }}
-                className="flex flex-col group  relative"
+                initial={{ opacity: 0, scale: 0.92 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.92 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="flex flex-col group relative w-full"
               >
-                
-               
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-zinc-200 shadow-sm border">
+         
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl  bg-zinc-800 shadow-sm border border-white/5">
                   <Image
                     src={item.image}
                     alt={item.title}
                     fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
+                    sizes="(max-width: 768px) 100vw, 25vw"
                     priority
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
 
-           
-                {index === 0 && (
-                  <button
-                    onClick={prevSlide}
-                    className="absolute -left-5 top-[38%] cursor-pointer -translate-y-1/2 z-20 p-3 bg-white hover:bg-gray-50 text-gray-800 rounded-full shadow-lg border border-gray-100 transition-all active:scale-90"
-                    aria-label="Previous Slide"
-                  >
-                    <FiArrowLeft className="w-5 h-5" />
-                  </button>
-                )}
-
-          
-                {index === visibleCards - 1 && (
-                  <button
-                    onClick={nextSlide}
-                    className="absolute -right-5 top-[38%] cursor-pointer -translate-y-1/2 z-20 p-3 bg-white hover:bg-gray-50 text-gray-800 rounded-full shadow-lg border border-gray-100 transition-all active:scale-90"
-                    aria-label="Next Slide"
-                  >
-                    <FiArrowRight className="w-5 h-5" />
-                  </button>
-                )}
-
         
-                <span className="text-xs font-semibold text-blue-500 tracking-wide mt-4 mb-2 text-left px-1">
+                <span className="text-xs font-semibold text-blue-400 tracking-wide mt-3 mb-1.5 text-left px-1">
                   {item.date}
                 </span>
-                <h3 className="text-[15px] font-bold text-gray-100 text-left leading-snug group-hover:text-blue-600 transition-colors px-1 line-clamp-2">
+                <h3 className="text-sm md:text-[15px] font-bold text-gray-100 text-left leading-snug group-hover:text-blue-400 transition-colors px-1 line-clamp-2 min-h-[2.5rem]">
                   {item.title}
                 </h3>
               </motion.div>
