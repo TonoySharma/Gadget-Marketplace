@@ -1,10 +1,15 @@
 import ProfilePage from '@/components/ProfilePage';
-import React from 'react';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "My Profile",
+    description: "Manage your account settings, secure your login details, and view your purchase history on My Gadget Hub.",
+};
 
 const MyProfilePage = () => {
     return (
         <div>
-          <ProfilePage></ProfilePage>
+            <ProfilePage></ProfilePage>
         </div>
     );
 };

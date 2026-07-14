@@ -13,6 +13,12 @@ import FadeUp from "@/components/FadeUp";
 import OurStory from "@/components/OurStory";
 import HowWeWork from "@/components/HowWeWork";
 import CoreValues from "@/components/CoreValues";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "About Us",
+    description: "Learn more about My Gadget Hub. We are dedicated to bringing you innovative, authentic, and high-quality tech solutions worldwide.",
+};
 
 
 const AboutPage = () => {
@@ -159,7 +165,7 @@ const AboutPage = () => {
                     <div className="bg-white/5 border border-white/10 rounded-3xl p-8 backdrop-blur-xl">
 
 
-                        <FaMobileAlt className="text-5xl text-cyan-400 mb-5"/>
+                        <FaMobileAlt className="text-5xl text-cyan-400 mb-5" />
 
 
                         <h3 className="text-2xl font-bold mb-3">
@@ -197,7 +203,7 @@ const AboutPage = () => {
 
 
                     {
-                        stats.map((item,index)=>(
+                        stats.map((item, index) => (
 
                             <FadeUp key={index}>
 
@@ -259,7 +265,7 @@ const AboutPage = () => {
 
 
                     {
-                        features.map((feature,index)=>(
+                        features.map((feature, index) => (
 
                             <FadeUp key={index}>
 

@@ -1,5 +1,12 @@
 import AllProducts from "@/components/AllProducts";
 import FadeUp from "@/components/FadeUp";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+    title: "Browse Products",
+    description: "Explore our massive catalog of premium tech products. Filter by category, price, and brand to find your perfect gadget.",
+};
+
 
 interface Product {
     _id: string;
@@ -94,7 +101,7 @@ async function getProducts({
 
 
 
-const ProductsPage = async ({searchParams}: Props) => {
+const ProductsPage = async ({ searchParams }: Props) => {
 
     const params = await searchParams;
     // console.log("PAGE PARAMS:", params);
