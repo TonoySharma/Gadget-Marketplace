@@ -45,7 +45,7 @@ async function getProducts({
     maxPrice: string;
 }) {
 
-    const url = new URL("http://localhost:5000/api/all-products");
+    const url = new URL(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/all-products`);
 
 
     url.searchParams.set("page", String(page));
@@ -81,7 +81,7 @@ async function getProducts({
     const res = await fetch(url.toString(), {
         cache: "no-store",
     });
-    console.log("API URL:", url.toString());
+    // console.log("API URL:", url.toString());
 
     if (!res.ok) {
         throw new Error("Failed to fetch products");
@@ -97,7 +97,7 @@ async function getProducts({
 const ProductsPage = async ({searchParams}: Props) => {
 
     const params = await searchParams;
-    console.log("PAGE PARAMS:", params);
+    // console.log("PAGE PARAMS:", params);
 
     const currentPage =
         Number(params.page) || 1;

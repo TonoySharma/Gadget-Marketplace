@@ -1,4 +1,5 @@
 import Banner from "@/components/Banner";
+import BlogSlider from "@/components/BlogSlider";
 import FeatureGrid from "@/components/FeatureGrid";
 import Footer from "@/components/Footer";
 import LimitedProductHome from "@/components/LemetedProductHome";
@@ -16,6 +17,7 @@ export default function Home() {
       <LimitedProductHome />
       <Testimonials />
       <FeatureGrid />
+      <BlogSlider></BlogSlider>
       <TechFAQ />
       <TradeInBanner></TradeInBanner>
       <TechShowcase></TechShowcase>

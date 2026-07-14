@@ -14,15 +14,6 @@ import toast from "react-hot-toast";
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
-
-  // const { data: session } = useSession();
-  // const user = session?.user as {
-  //   name?: string | null;
-  //   email?: string | null;
-  //   image?: string | null;
-  //   role?: string; 
-  // } | undefined;
-
   const { data: session } = authClient.useSession();
 
   const user = session?.user;
@@ -35,7 +26,7 @@ const NavBar = () => {
       return;
     }
 
-    toast.success("Logged out successfully!");
+    toast.success("Log Out successfully!");
   };
 
 
@@ -111,15 +102,6 @@ const NavBar = () => {
                       Manage Products
                     </NavLink>
                   </li>
-                  <li>
-                    <NavLink
-                      href="/profile"
-                      className="block rounded-full px-4 py-2 text-sm text-gray-600 transition-all hover:bg-white hover:text-indigo-600 hover:shadow-sm no-underline"
-                    >
-                      Profile
-                    </NavLink>
-                  </li>
-
                 </>
               )}
             </ul>
@@ -161,14 +143,19 @@ const NavBar = () => {
                       {user.email && <p className="truncate text-xs text-gray-500">{user.email}</p>}
                     </div>
 
-                    <div className="mt-1">
+                    <div className="mt-1 space-y-3">
+                      <li>
+                        <NavLink
+                          href="/profile"
+                          className="block rounded-full border border-dashed font-medium px-4 py-2 text-sm text-gray-600 transition-all hover:bg-indigo-100"
+                        >
+                          Profile
+                        </NavLink>
+                      </li>
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-2 px-3 py-2 text-sm font-medium text-red-600 rounded-xl hover:bg-red-50/50 transition-colors cursor-pointer text-left border-none bg-transparent"
-                      >
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
+                        className="w-full flex items-center rounded-full border border-dashed gap-2 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50/90 transition-colors cursor-pointer text-left  bg-transparent">
+                    
                         Log Out
                       </button>
                     </div>
@@ -205,7 +192,7 @@ const NavBar = () => {
         </div>
       </nav>
 
-      {/* --- Premium Mobile Slider / Sidebar (Fully Responsive) --- */}
+      {/* Mobile Slider  */}
       <div className={`fixed inset-0 z-50 md:hidden transition-opacity duration-300 ${isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
 
         {/* Backdrop Overlay */}

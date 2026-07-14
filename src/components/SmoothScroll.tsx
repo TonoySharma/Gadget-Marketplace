@@ -7,10 +7,12 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
   useEffect(() => {
 
     const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // smooth easing function
+      duration: 0.7,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
+      wheelMultiplier: 0.8,
     });
+
 
     function raf(time: number) {
       lenis.raf(time);
@@ -23,7 +25,9 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     return () => {
       lenis.destroy();
     };
+
   }, []);
+
 
   return <>{children}</>;
 }

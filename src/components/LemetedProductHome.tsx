@@ -17,7 +17,7 @@ interface Product {
 
 async function getFeaturedProducts(): Promise<Product[]> {
     const res = await fetch(
-        "http://localhost:5000/api/featured-products",
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/featured-products`,
         {
             cache: "no-store",
         }

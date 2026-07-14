@@ -193,7 +193,7 @@ const ProductFilter = () => {
                 >
                     <Button
                         type="submit"
-                        color="primary"
+                        // color="primary"
                         style={{ width: "100%", height: "40px" }}
                     >
                         Search

@@ -2,7 +2,7 @@
 
 import { Button } from "@heroui/react";
 import { useState } from "react";
-import { FaShoppingCart } from "react-icons/fa";
+
 
 
 interface Product {

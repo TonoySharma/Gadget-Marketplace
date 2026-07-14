@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { FiBookOpen, FiDollarSign, FiFileText, FiImage, FiAlertCircle, FiTag, FiMapPin, FiGrid } from "react-icons/fi";
 import FadeUp from "./FadeUp";
+import { authClient } from "@/lib/auth-client";
 
 
 interface FormData {
@@ -88,10 +89,14 @@ export default function ProductForm() {
         rating: 0,
       };
 
+       const {data: token} = await authClient.token();
+      //  console.log(token,   "token veryfay");
+      
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/add-products`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          authorization: `Bearer ${token?.token}`,
         },
         body: JSON.stringify(productData),
       });
@@ -309,7 +314,7 @@ export default function ProductForm() {
             isDisabled={loading}
             className="w-full mt-2 bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? "Uploading & Adding..." : "Submit product"}
+            {loading ? "Uploading & Adding..." : "Add Product"}
           </Button>
         </form>
       </FadeUp>

@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaArrowRight, FaPlay } from "react-icons/fa";
-
+import CountUp from "react-countup";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { Button } from "@heroui/react";
@@ -48,21 +48,39 @@ export default function Banner(): React.JSX.Element {
     };
   }, [emblaApi, onSelect]);
 
-  const stats: StatItem[] = [
-    { number: "50K+", label: "Happy Customers" },
-    { number: "300+", label: "Latest Devices" },
-    { number: "99%", label: "Positive Reviews" },
+  interface StatItem {
+    end: number;
+    suffix: string;
+    label: string;
+  }
+
+  const stats = [
+    {
+      end: 50,
+      suffix: "K+",
+      label: "Happy Customers",
+    },
+    {
+      end: 300,
+      suffix: "+",
+      label: "Latest Devices",
+    },
+    {
+      end: 99,
+      suffix: "%",
+      label: "Positive Reviews",
+    },
   ];
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 min-h-screen flex items-center justify-center">
-      
+
       {/* Blur Background Elements */}
       <div className="absolute -left-32 top-20 h-80 w-80 rounded-full bg-cyan-500/20 blur-[120px]" />
       <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-blue-600/20 blur-[140px]" />
 
       <div className="container mx-auto flex flex-col items-center justify-center gap-12 px-6 py-24 lg:flex-row z-10 w-full">
-        
+
         {/* Left Content */}
         <motion.div
           initial={{ opacity: 0, x: -70 }}
@@ -105,8 +123,18 @@ export default function Banner(): React.JSX.Element {
           <div className="mt-16 grid grid-cols-3 gap-8 max-w-2xl border-t border-white/10 pt-10">
             {stats.map((stat, index) => (
               <div key={index} className="text-center lg:text-left">
-                <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">{stat.number}</h2>
-                <p className="text-base md:text-lg text-gray-400 mt-1 font-medium">{stat.label}</p>
+                <h2 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+                  <CountUp
+                    end={stat.end}
+                    duration={2.5}
+                    separator=","
+                    suffix={stat.suffix}
+                  />
+                </h2>
+
+                <p className="text-base md:text-lg text-gray-400 mt-1 font-medium">
+                  {stat.label}
+                </p>
               </div>
             ))}
           </div>
@@ -122,7 +150,7 @@ export default function Banner(): React.JSX.Element {
           <div className="absolute -inset-10 rounded-full bg-blue-600/10 blur-[100px]" />
 
           {/* Embla Carousel Container */}
-          <div className="overflow-hidden rounded-[40px] border border-white/10 shadow-2xl shadow-black/30 bg-white/5 backdrop-blur-xl" ref={emblaRef}>
+          <div className="overflow-hidden rounded-xl border border-white/10 shadow-2xl shadow-black/30 bg-white/5 backdrop-blur-xl" ref={emblaRef}>
             <div className="flex">
               {smartphoneImages.map((src, index) => (
                 <div className="flex-[0_0_100%] min-w-0 relative h-[450px] lg:h-[600px] w-full" key={index}>
@@ -130,7 +158,7 @@ export default function Banner(): React.JSX.Element {
                     src={src}
                     alt={`Smartphone Showcase ${index + 1}`}
                     fill
-                    className="object-cover rounded-[40px] drop-shadow-[0_30px_60px_rgba(0,255,255,.3)]"
+                    className="object-cover rounded-xl drop-shadow-[0_30px_60px_rgba(0,255,255,.3)]"
                     priority={index === 0}
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 600px"
                   />
@@ -145,9 +173,8 @@ export default function Banner(): React.JSX.Element {
               <Button
                 key={index}
                 onClick={() => emblaApi?.scrollTo(index)}
-                className={`h-3.5 rounded-full transition-all duration-300 ${
-                  selectedIndex === index ? "w-10 bg-cyan-400" : "w-3.5 bg-white/30 hover:bg-white/50"
-                }`}
+                className={`h-3.5 rounded-full transition-all duration-300 ${selectedIndex === index ? "w-10 bg-cyan-400" : "w-3.5 bg-white/30 hover:bg-white/50"
+                  }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}

@@ -1,4 +1,3 @@
-import React from 'react';
 import FadeUp from './FadeUp';
 
 const OurStory = () => {
@@ -17,7 +16,7 @@ const OurStory = () => {
                 </FadeUp>
 
 
-                <div className="relative border-l border-cyan-400/30 ml-5 space-y-10">
+                <FadeUp className="relative border-l border-cyan-400/30 ml-5 space-y-10">
 
 
                     {
@@ -73,7 +72,7 @@ const OurStory = () => {
                     }
 
 
-                </div>
+                </FadeUp>
 
 
             </section>
