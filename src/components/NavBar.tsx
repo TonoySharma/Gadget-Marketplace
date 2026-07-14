@@ -4,14 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@heroui/react";
 import Image from "next/image";
-
 import NavLink from "./NavLink";
-
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
 
 
+
 const NavBar = () => {
+
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   const { data: session } = authClient.useSession();
@@ -22,11 +22,14 @@ const NavBar = () => {
     const { error } = await authClient.signOut();
 
     if (error) {
-      console.log(error);
+      toast.error(error.message || "Logout failed!");
       return;
     }
 
     toast.success("Log Out successfully!");
+
+    // Force redirect
+    window.location.replace("/login");
   };
 
 
@@ -155,7 +158,7 @@ const NavBar = () => {
                       <button
                         onClick={handleLogout}
                         className="w-full flex items-center rounded-full border border-dashed gap-2 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50/90 transition-colors cursor-pointer text-left  bg-transparent">
-                    
+
                         Log Out
                       </button>
                     </div>
