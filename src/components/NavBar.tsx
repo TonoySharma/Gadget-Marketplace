@@ -211,12 +211,8 @@ const NavBar = () => {
             {/* Sidebar Header */}
             <div className="flex items-center justify-between pb-6 border-b border-gray-100">
               <div className="flex items-center gap-2 font-bold text-lg text-gray-900">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600">
-                  <svg width="14" height="14" fill="none" viewBox="0 0 16 16">
-                    <path d="M8 2L14 5.5V10.5L8 14L2 10.5V5.5L8 2Z" fill="white" stroke="white" strokeWidth="0.5" />
-                  </svg>
-                </div>
-                <span>Gadget Mart</span>
+            
+                <span>Mobile Shop</span>
               </div>
 
               {/* Close Button */}
@@ -282,7 +278,7 @@ const NavBar = () => {
             </div>
           </div>
 
-          {/* Sidebar Footer & Auth Actions (কমেন্টে রাখা হলো যেমনটা চেয়েছিলেন) */}
+   
           <div className="border-t border-gray-100 pt-4 flex flex-col gap-3">
             {user ? (
               <div className="flex flex-col gap-4">

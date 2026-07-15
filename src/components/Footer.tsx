@@ -195,10 +195,10 @@ export default function Footer(): JSX.Element {
               <li className="flex items-center gap-3">
                 <FaPhoneAlt className="text-cyan-400" />
                 <a
-                  href="tel:+8801700000000"
+                  href="tel:+880 13*******"
                   className="hover:text-cyan-400"
                 >
-                  +880 1700-000000
+                  +880 13*******
                 </a>
               </li>
 
